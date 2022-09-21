@@ -4,25 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/BlockNumber.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/DataReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumLogEntry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumTransaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Web3JBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Web3JTransaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Web3jClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/data.txt" afterDir="false" />
-    </list>
+    <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="init" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -99,8 +81,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663597955185</updated>
-      <workItem from="1663597956585" duration="5051000" />
+      <workItem from="1663597956585" duration="5613000" />
     </task>
+    <task id="LOCAL-00001" summary="init">
+      <created>1663770138250</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1663770138250</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,5 +106,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
   </component>
 </project>
