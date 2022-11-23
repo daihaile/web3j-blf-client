@@ -5,26 +5,35 @@ import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.crypto.*;
 import org.web3j.protocol.Service;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.core.methods.response.EthBlock.Block;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.ipc.UnixIpcService;
-import org.web3j.protocol.ipc.WindowsIpcService;
 import org.web3j.protocol.websocket.WebSocketClient;
 import org.web3j.protocol.websocket.WebSocketService;
+import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.Transfer;
+import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.response.PollingTransactionReceiptProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
+import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
+
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.ConnectException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class Web3jClient implements EthereumClient {
@@ -33,7 +42,7 @@ public class Web3jClient implements EthereumClient {
     private final WebSocketService wsService;
     private final Web3j web3j;
 
-    private Web3jClient(WebSocketService wsService) {
+    public Web3jClient(WebSocketService wsService) {
         this.wsService = wsService;
         this.service = null;
         this.web3j = Web3j.build(wsService);
@@ -45,16 +54,40 @@ public class Web3jClient implements EthereumClient {
         this.web3j = Web3j.build(service);
     }
 
+    public void sendTx() throws Exception {
+        String pk = "8c85bc7200582c1eedadc329443c7ef6ab5e0993a131a79a125211f9f14d7fa8";
+        Credentials credentials = Credentials.create(pk);
+        final String amount = "6";
+        final long ropstenChainId = 2412;
+
+        String to = "0x4b11f0716B092ad50bB9c6753c3C06E2DC756194";
+        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        BigInteger txCount = ethGetTransactionCount.getTransactionCount();
+
+        BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
+        BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
+        TransactionReceipt transactionReceipt = Transfer.sendFunds(
+                web3j, credentials, "0x4b11f0716B092ad50bB9c6753c3C06E2DC756194",
+                BigDecimal.valueOf(10.0), Convert.Unit.ETHER).send();
+
+        TransactionReceiptProcessor receiptProcessor = new PollingTransactionReceiptProcessor(
+                web3j,
+                TransactionManager.DEFAULT_POLLING_FREQUENCY,
+                TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+
+        System.out.println("Sent transaction: " + transactionReceipt.getTransactionHash());
+
+    }
     public static Web3jClient connectWebsocket(String url) {
 
         try {
             final WebSocketClient wsClient = new WebSocketClient(new URI(url));
             final WebSocketService wsService = new WebSocketService(wsClient, false);
-
             wsService.connect();
 
             return new Web3jClient(wsService);
         } catch (Exception e) {
+            System.out.println("Connection to websocket failed!!");
             System.out.print(e);
         }
         return null;
@@ -69,6 +102,8 @@ public class Web3jClient implements EthereumClient {
             final String errorMsg = String.format("Ipc connection not for %s operating system.");
             System.out.println(errorMsg);
             return null;
+        } else {
+            System.out.println("Service not null");
         }
         return new Web3jClient(service);
     }
@@ -132,6 +167,18 @@ public class Web3jClient implements EthereumClient {
                 System.out.println(message);
             }
         }
+    }
+
+    public void trace() {
+        Web3ClientVersion web3ClientVersion = null;
+        try {
+            web3ClientVersion = this.web3j.web3ClientVersion().sendAsync().get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(web3ClientVersion.getWeb3ClientVersion());
     }
 
     public EthereumBlock queryBlockData(BigInteger blockNumber) {
