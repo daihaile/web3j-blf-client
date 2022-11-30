@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Client.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/GethIPC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Web3jClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Web3jClient.java" afterDir="false" />
     </list>
@@ -141,7 +134,7 @@
       <workItem from="1664652455953" duration="1581000" />
       <workItem from="1668257368077" duration="2967000" />
       <workItem from="1668597273736" duration="7618000" />
-      <workItem from="1669215939422" duration="3601000" />
+      <workItem from="1669215939422" duration="6293000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1663770138250</created>
@@ -157,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663770730533</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="init">
+      <created>1669220001158</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669220001158</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

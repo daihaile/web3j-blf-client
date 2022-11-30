@@ -30,9 +30,9 @@ public class Main {
         //Web3jClient client = Web3jClient.connectIpc(ipcPath);
         BigInteger blockNumber = client.queryBlockNumber();
         BigInteger blockNr = BigInteger.valueOf(66);
-        System.out.println(blockNumber);
-        client.queryBlockData(blockNr);
+        EthereumBlock block = client.queryBlockData(blockNr);
         getInfo(reader);
+        System.out.println(block.transactionCount());
         GethIPC ipc = new GethIPC(ipcPath);
         try {
             ipc.executeCommand("eth.accounts");

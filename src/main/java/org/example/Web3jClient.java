@@ -208,7 +208,7 @@ public class Web3jClient implements EthereumClient {
         }
 
         if (logResult.hasError()) {
-            System.out.println("logresult error");
+            System.out.println("log result error");
             return null;
         }
         return this.transformBlockResults(blockResult, logResult);
