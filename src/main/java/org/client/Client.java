@@ -1,17 +1,21 @@
 package org.client;
 
-import org.example.EthereumBlock;
-import org.example.EthereumClient;
+import org.example.*;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Service;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.websocket.WebSocketClient;
 import org.web3j.protocol.websocket.WebSocketService;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client implements EthereumClient {
@@ -70,14 +74,97 @@ public class Client implements EthereumClient {
 
     }
 
-    @Override
-    public BigInteger queryBlockNumber() {
+    public List<EthereumTransaction> getTransactionsOfBlock(BigInteger blockNumber) {
         return null;
     }
 
     @Override
+    public BigInteger queryBlockNumber() {
+
+        final EthBlockNumber queryResult;
+        try {
+            queryResult = this.web3j.ethBlockNumber().send();
+
+            if (queryResult.hasError()) {
+                System.out.println("query result error");
+                return null;
+            }
+
+            return queryResult.getBlockNumber();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void addTransactions(EthereumBlock ethBlock, EthBlock.Block block) {
+        for (int i = 0; i < block.getTransactions().size(); i++) {
+            final Transaction tx = (Transaction) block.getTransactions().get(i);
+            addEthereumTransaction(ethBlock, tx);
+        }
+    }
+
+    private void addLogs(EthereumBlock ethBlock, EthLog logResult) {
+        for (int i = 0; i < logResult.getLogs().size(); i++) {
+            final Log log = (Log) logResult.getLogs().get(i);
+            System.out.println(ethBlock);
+            System.out.println(log);
+        }
+    }
+
+    TransactionReceipt queryTransactionReceipt(String hash) {
+        final EthGetTransactionReceipt transactionReceipt;
+        try {
+            transactionReceipt = this.web3j.ethGetTransactionReceipt(hash).send();
+        } catch (IOException e) {
+            System.out.println(e);
+            return null;
+        }
+
+        return transactionReceipt.getResult();
+    }
+    private void addEthereumTransaction(EthereumBlock block, Transaction tx) {
+        final EthereumTransaction ethTx = new Web3jTransaction(this, block, tx);
+        block.addTransaction(ethTx);
+    }
+    private EthereumBlock transformBlockResults(EthBlock blockResult, EthLog logResult) {
+        final EthereumBlock ethBlock = new Web3jBlock(blockResult.getBlock());
+        this.addTransactions(ethBlock, blockResult.getBlock());
+        this.addLogs(ethBlock, logResult);
+        return ethBlock;
+    }
+    @Override
     public EthereumBlock queryBlockData(BigInteger blockNumber) {
-        return null;
+        final DefaultBlockParameterNumber number = new DefaultBlockParameterNumber(blockNumber);
+
+        final EthBlock blockResult;
+        try {
+            blockResult = this.web3j.ethGetBlockByNumber(number, true).send();
+        } catch (IOException e) {
+            System.out.println(e);
+            return null;
+        }
+
+        if (blockResult.hasError()) {
+            System.out.println("error");
+            return null;
+        }
+
+        final EthFilter filter = new EthFilter(number, number, new ArrayList<>());
+
+        final EthLog logResult;
+        try {
+            logResult = this.web3j.ethGetLogs(filter).send();
+        } catch (IOException e) {
+            System.out.println(e);
+            return null;
+        }
+
+        if (logResult.hasError()) {
+            System.out.println("log result error");
+            return null;
+        }
+        return this.transformBlockResults(blockResult, logResult);
     }
 
     @Override
