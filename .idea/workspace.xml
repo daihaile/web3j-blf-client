@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/Web3jBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/Web3jTransaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" afterDir="false" />
+    <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/GethIPC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +148,7 @@
       <workItem from="1668597273736" duration="7618000" />
       <workItem from="1669215939422" duration="6293000" />
       <workItem from="1669835262326" duration="784000" />
-      <workItem from="1670168498826" duration="8881000" />
+      <workItem from="1670168498826" duration="15153000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1663770138250</created>
@@ -180,7 +178,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669835287240</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update">
+      <created>1670248083346</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670248083346</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,6 +221,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
 </project>

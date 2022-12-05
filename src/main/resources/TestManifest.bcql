@@ -3,7 +3,9 @@
 connectIpc("/home/ethuser/.local/share/openethereum/jsonrpc.ipc");
 setOutputFolder("./output_Richard");
 address augur = 0x75228DcE4D82566d93068A8D5d49435216551599;
-
+// tm_opcodes=call,log0,log1,log2
+// tm_contract=0xa60f8119b1360fd504d22e043ce5625b41daa44f
+// tm_blocks=30,100
 // BLOCKS (5926229) (10193336) {
 BLOCKS    (5933155)  (7133155) {
   int timestamp = multiply(block.timestamp, 1000);
