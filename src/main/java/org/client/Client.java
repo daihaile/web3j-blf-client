@@ -6,17 +6,30 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Service;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
+import org.web3j.protocol.core.JsonRpc2_0Web3j;
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.websocket.WebSocketClient;
 import org.web3j.protocol.websocket.WebSocketService;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+
+
 
 public class Client implements EthereumClient {
     private final Service service;
@@ -170,5 +183,35 @@ public class Client implements EthereumClient {
     @Override
     public List<Type> queryPublicMember(String contract, BigInteger block, String memberName, List<Type> inputParameters, List<TypeReference<?>> returnTypes) throws Throwable {
         return null;
+    }
+
+    public void traceTransaction(ArrayList<EthereumTransaction> txList) throws IOException, ExecutionException, InterruptedException {
+
+        if(this.wsService != null && service == null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("tracer", "callTracer");
+            JSONObject tracerConfig = new JSONObject();
+            tracerConfig.put("onlyTopCall", true);
+            jsonObject.put("tracerConfig", tracerConfig);
+            txList.forEach(tx->{
+                List params = new ArrayList();
+                Request req = new Request();
+                params.add(tx.getHash());
+                params.add(jsonObject);
+                req.setMethod("debug_traceTransaction");
+                req.setParams(params);
+                System.out.println(req.getParams().toString());
+                CompletableFuture<Response> res = this.wsService.sendAsync(req,Response.class);
+                Response result = null;
+                try {
+                    result = res.get();
+                    System.out.println(result.getResult());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 }

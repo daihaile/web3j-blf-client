@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/GethIPC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/GethIPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/GethIPC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/GethIPC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,24 +41,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "editor.preferences.import"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "TEXT"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;TEXT&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.client" />
@@ -148,7 +152,9 @@
       <workItem from="1668597273736" duration="7618000" />
       <workItem from="1669215939422" duration="6293000" />
       <workItem from="1669835262326" duration="784000" />
-      <workItem from="1670168498826" duration="15153000" />
+      <workItem from="1670168498826" duration="15842000" />
+      <workItem from="1670703476414" duration="15286000" />
+      <workItem from="1670854169606" duration="1087000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1663770138250</created>
@@ -185,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670248083346</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update">
+      <created>1670269576920</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670269576920</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

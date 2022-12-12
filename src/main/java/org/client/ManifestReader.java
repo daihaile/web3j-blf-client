@@ -62,6 +62,7 @@ public class ManifestReader {
             if(this.startBlock == null || this.endBlock == null ) {
                 throw new IOException("startblock or endblock not defined");
             }
+            LOGGER.info(this.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

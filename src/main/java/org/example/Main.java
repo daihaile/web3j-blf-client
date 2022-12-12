@@ -1,23 +1,9 @@
 package org.example;
 
-import org.example.Web3jClient;
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Stream;
-
-
-import org.example.GethIPC;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,12 +19,6 @@ public class Main {
         EthereumBlock block = client.queryBlockData(blockNr);
         getInfo(reader);
         System.out.println(block.transactionCount());
-        GethIPC ipc = new GethIPC(ipcPath);
-        try {
-            ipc.executeCommand("eth.accounts");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static void getInfo(EthereumDataReader reader){
