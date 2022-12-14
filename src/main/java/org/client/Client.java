@@ -1,6 +1,9 @@
 package org.client;
 
+import com.fasterxml.jackson.core.JsonToken;
 import org.example.*;
+import org.json.JSONArray;
+import org.json.JSONTokener;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Service;
@@ -20,10 +23,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.net.URISyntaxException;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -185,11 +187,12 @@ public class Client implements EthereumClient {
         return null;
     }
 
-    public void traceTransaction(ArrayList<EthereumTransaction> txList) throws IOException, ExecutionException, InterruptedException {
+    public void traceTransaction(ArrayList<EthereumTransaction> txList) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
 
         if(this.wsService != null && service == null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tracer", "callTracer");
+
             JSONObject tracerConfig = new JSONObject();
             tracerConfig.put("onlyTopCall", true);
             jsonObject.put("tracerConfig", tracerConfig);
@@ -200,18 +203,99 @@ public class Client implements EthereumClient {
                 params.add(jsonObject);
                 req.setMethod("debug_traceTransaction");
                 req.setParams(params);
+
                 System.out.println(req.getParams().toString());
                 CompletableFuture<Response> res = this.wsService.sendAsync(req,Response.class);
                 Response result = null;
                 try {
                     result = res.get();
-                    System.out.println(result.getResult());
+                    String object = result.getResult().toString();
+                    String[] str = object.split("structLogs=");
+                    String arrayString = str[1].substring(1, str[1].length() -1);
+                    String jsonString = "[";
+                    String[] brackets = arrayString.split("},");
+                    String jsonString1 = "{\"structLog\": [";
+                    for (int i = 0; i < brackets.length; i++) {
+                        String objectLine = brackets[i] + "}";
+                        objectLine = objectLine.replaceAll("=", ":");
+                        String objectPart = objectLine.split("stack")[0];
+                        String stackPart = objectLine.split("stack")[1];
+
+
+                        // format objectpart
+
+                        int sliceStart = 2;
+                        if( i == 0 ) {
+                            sliceStart = 1;
+                        }
+                        objectPart = objectPart.substring(sliceStart, objectPart.length() - 2 ).replaceAll(" ", "");
+
+                        String[] objectPartSplit = objectPart.split(",");
+                        String newObjectPart = "{";
+                        for (int j = 0; j < objectPartSplit.length ; j++) {
+                            String[] objectPartSplitSplit = objectPartSplit[j].split(":");
+                            String key = "\"" + objectPartSplitSplit[0] + "\"";
+                            String value = "\"" + objectPartSplitSplit[1] + "\"";
+                            newObjectPart +=  key + ":" + value + ",";
+                        }
+
+                        //format stackpart
+                        String stackPartnew = stackPart.substring(2, stackPart.length() - 2 ).replaceAll("]}", "").replaceAll(" ", "");;
+                        String newStackPart = "\"stack\":[";
+
+                        String[] stackPartSplit = stackPartnew.split(",");
+
+                        for (int k = 0; k < stackPartSplit.length ; k++) {
+                            if(stackPartSplit[k].length() > 0) {
+                                String key = "\"" + stackPartSplit[k] + "\"";
+                                newStackPart +=  key;
+                                if( k < stackPartSplit.length -1 ){
+                                    newStackPart += ",";
+                                }
+                            } else {
+
+                            }
+                        }
+                        newStackPart += "]}";
+
+                        jsonString = newObjectPart + newStackPart;
+                        jsonString1 += jsonString;
+
+                        if( i <  brackets.length - 1) {
+                            jsonString1 += ",";
+                        }
+                    }
+                    jsonString1 += "]}";
+                    JSONObject structLogJson = new JSONObject(jsonString1);
+                    //System.out.println(structLogJson.toString());
+
+                    //System.out.println(structLogJson.toMap().entrySet());
+
+                    for (Map.Entry<String, Object> entry : structLogJson.toMap().entrySet()) {
+                        System.out.println(entry.getKey());
+                    }
+
+
+
+
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 }
             });
+
         }
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "service=" + service +
+                ", wsService=" + wsService +
+                ", web3j=" + web3j +
+                '}';
     }
 }

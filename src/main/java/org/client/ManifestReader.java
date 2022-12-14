@@ -31,6 +31,7 @@ public class ManifestReader {
     }
 
     private void extractParameters() {
+        // TODO: read ipc path or websocket
         LOGGER.info("Reading manifest");
         try {
             InputStream fs = this.createFileStream();

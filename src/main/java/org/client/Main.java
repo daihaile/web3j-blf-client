@@ -7,6 +7,7 @@ import org.example.EthereumTransaction;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -18,12 +19,20 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger("Main");
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         // contract address = 0x816570a75d5e9a8906d63606a9bd452e7446e52d
+        String filepath = "D:\\Uni\\eth-client\\src\\main\\resources\\TestManifest.bcql";
+        //String filepath = "\"/Users/daihaile/Documents/Projects/eth-client/src/main/resources/TestManifest.bcql\"";
         String ipcPath = new String("/Users/daihaile/Documents/Thesis/chain/node1/geth.ipc");
         String path = "ws://127.0.0.1:8549";
         Client client = Client.connectWebsocket(path);
-        ManifestReader mr = new ManifestReader("/Users/daihaile/Documents/Projects/eth-client/src/main/resources/TestManifest.bcql");
+        System.out.println(client.toString());
+        ManifestReader mr = new ManifestReader(filepath);
+
         ArrayList<EthereumTransaction> txList = getAllTransactions(client,mr.getStartBlock(), mr.getEndBlock());
-        client.traceTransaction(txList);
+        try {
+            client.traceTransaction(txList);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         GethIPC ipc = new GethIPC(ipcPath);
         if(!txList.isEmpty()) {
             //ipc.traceTransactionList(txList);
@@ -31,7 +40,7 @@ public class Main {
     }
 
     public static ArrayList<EthereumTransaction> getAllTransactions(Client client, BigInteger blockStart, BigInteger blockEnd) {
-        BigInteger blockNumberEnd = client.queryBlockNumber();
+        BigInteger blockNumberEnd = blockEnd; // client.queryBlockNumber();
         BigInteger currentBlockNumber = blockStart;
         EthereumBlock block;
         EthereumTransaction tx;
