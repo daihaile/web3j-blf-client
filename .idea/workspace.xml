@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/resources/Augur.bcql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smart Contracts/A_Init.sol" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smart Contracts/BC_Contract.sol" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smart Contracts/D_Contract.sol" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smart Contracts/EF_Contract.sol" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smart-contract-calls/Contract.sol" beforeDir="false" afterPath="$PROJECT_DIR$/smart-contract-calls/Contract.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/ManifestReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/BlockNumber.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -154,7 +160,8 @@
       <workItem from="1670168498826" duration="15842000" />
       <workItem from="1670703476414" duration="15286000" />
       <workItem from="1670854169606" duration="1087000" />
-      <workItem from="1670942209514" duration="17213000" />
+      <workItem from="1670942209514" duration="36207000" />
+      <workItem from="1671196111620" duration="5181000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1663770138250</created>
@@ -198,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670269576920</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="update">
+      <created>1670979102616</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670979102616</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

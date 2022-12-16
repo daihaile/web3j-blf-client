@@ -28,7 +28,6 @@ public class EthereumDataReader extends DataReader<EthereumClient, EthereumBlock
             System.out.println("Already connected");
             return;
         }
-        System.out.println("calling connectWebsocket");
         this.client = Web3jClient.connectWebsocket(url);
     }
 

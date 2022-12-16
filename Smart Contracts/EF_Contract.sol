@@ -1,1 +1,0 @@
-get 1/4 or 3/4 of the money depending on the timestamp

@@ -21,18 +21,23 @@ public class Main {
         // contract address = 0x816570a75d5e9a8906d63606a9bd452e7446e52d
         String filepath = "D:\\Uni\\eth-client\\src\\main\\resources\\TestManifest.bcql";
         //String filepath = "\"/Users/daihaile/Documents/Projects/eth-client/src/main/resources/TestManifest.bcql\"";
-        String ipcPath = new String("/Users/daihaile/Documents/Thesis/chain/node1/geth.ipc");
+
+        //String ipcPath = new String("/Users/daihaile/Documents/Thesis/chain/node1/geth.ipc");
+        String ipcPath = new String("\\\\wsl$\\Ubuntu\\home\\diehigh\\chain\\node1");
         String path = "ws://127.0.0.1:8549";
         Client client = Client.connectWebsocket(path);
         System.out.println(client.toString());
         ManifestReader mr = new ManifestReader(filepath);
 
         ArrayList<EthereumTransaction> txList = getAllTransactions(client,mr.getStartBlock(), mr.getEndBlock());
+
         try {
             client.traceTransaction(txList);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+
+
         GethIPC ipc = new GethIPC(ipcPath);
         if(!txList.isEmpty()) {
             //ipc.traceTransactionList(txList);
@@ -48,7 +53,6 @@ public class Main {
         while(currentBlockNumber.compareTo(blockNumberEnd) < 1) {
             block = client.queryBlockData(currentBlockNumber);
             if(block.transactionCount() > 0) {
-                LOGGER.info("Current Block: " + currentBlockNumber + " Transactions: " + block.transactionCount());
                 Stream<EthereumTransaction> stream = block.transactionStream();
                 stream.forEach(transaction -> {
                     txList.add(transaction);
@@ -56,6 +60,7 @@ public class Main {
             }
             currentBlockNumber = currentBlockNumber.add(BigInteger.valueOf(1));
         }
+        LOGGER.info("Fetched " + txList.toArray().length + " transactions in " + blockStart + " to " + blockNumberEnd);
         return txList;
     }
 }

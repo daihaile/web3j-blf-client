@@ -5,7 +5,7 @@ setOutputFolder("./output_Richard");
 address augur = 0x75228DcE4D82566d93068A8D5d49435216551599;
 // tm_opcodes=call,log0,log1,log2
 // tm_contract=0xc1286347b69ed80e640c8af18dace17df0a6dd7c
-// tm_blocks=119,120
+// tm_blocks=338,399
 
 // WINDOWS 0xc1286347b69ed80e640c8af18dace17df0a6dd7c
 // BLOCKS (5926229) (10193336) {
