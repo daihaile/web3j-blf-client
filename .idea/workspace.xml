@@ -5,20 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionCall.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionTrace.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smart Contracts/A_Init.sol" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smart Contracts/BC_Contract.sol" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smart Contracts/D_Contract.sol" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smart Contracts/EF_Contract.sol" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smart-contract-calls/Contract.sol" beforeDir="false" afterPath="$PROJECT_DIR$/smart-contract-calls/Contract.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/BlockNumber.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EthereumDataReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +19,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -161,7 +152,7 @@
       <workItem from="1670703476414" duration="15286000" />
       <workItem from="1670854169606" duration="1087000" />
       <workItem from="1670942209514" duration="36207000" />
-      <workItem from="1671196111620" duration="5181000" />
+      <workItem from="1671196111620" duration="13120000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1663770138250</created>
@@ -212,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670979102616</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="update">
+      <created>1671224580251</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1671224580251</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,5 +248,19 @@
     <MESSAGE value="init" />
     <MESSAGE value="update" />
     <option name="LAST_COMMIT_MESSAGE" value="update" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.NumberFormatException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

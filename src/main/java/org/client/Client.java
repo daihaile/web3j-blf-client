@@ -199,31 +199,58 @@ public class Client implements EthereumClient {
         write.write("txHash,from0,to0,value0,from1,to1,value1,from2,to2,value2,from3,to3,value3,from4,to4,value4\n");
 
         if(this.wsService != null && service == null) {
-
+            Gson jsonObject = new Gson();
+            TypeToken<Map<String, String>> mapType = new TypeToken<Map<String, String>>(){};
+            String json = "{\"tracer\": \"callTracer\"}";
+            Map<String, String> stringMap = jsonObject.fromJson(json, mapType);
+            List params = new ArrayList<String>();
+            params.add("0x");
+            params.add(stringMap);
+            Request req = new Request();
+            req.setMethod("debug_traceTransaction");
+            req.setParams(params);
+            req.setId(2412);
             txList.forEach(tx->{
-                Gson jsonObject = new Gson();
-                TypeToken<Map<String, String>> mapType = new TypeToken<Map<String, String>>(){};
-                String json = "{\"tracer\": \"callTracer\"}";
-                Map<String, String> stringMap = jsonObject.fromJson(json, mapType);
-                List params = new ArrayList<String>();
-                params.add(tx.getHash());
-                params.add(stringMap);
-                Request req = new Request();
-                req.setMethod("debug_traceTransaction");
-                req.setParams(params);
-                req.setId(2412);
-                CompletableFuture<Response> res = this.wsService.sendAsync(req,Response.class);
-                Response result = null;
+
                 try {
+
+                    if(!params.get(0).toString().contains("0x")) {
+                        throw new RuntimeException("No valid address in argument 0");
+                    }
+                    params.remove(0);
+                    params.add(0, tx.getHash());
+                    CompletableFuture<Response> res = this.wsService.sendAsync(req,Response.class);
+                    Response result = null;
                     result = res.get();
                     if(result.getResult() != null) {
-                        HashMap<Key, Value> map = new LinkedHashMap<>((LinkedHashMap) result.getResult());
-                        System.out.println((tx.getBlock().getNumber() + ": " + tx.getHash() + " call to " + map.get("to") + " " + map.get("value")));
+                        HashMap<Key, Object> map = new HashMap<>((LinkedHashMap) result.getResult());
+
+                        String from = map.get("from").toString();
+                        String to = map.get("to").toString();
+                        String value = map.get("value").toString();
+                        TransactionTrace trace = new TransactionTrace(tx, from, to, value);
+
+                        if(map.get("output") != null) {
+                            String output = map.get("output").toString();
+                            trace.setOutput(output);
+                        }
+
+                        if(map.get("error") != null) {
+                            String output = map.get("error").toString();
+                            trace.setError(output);
+                        }
+                        System.out.println(trace);
 
                         if(map.get("calls") != null) {
-                            ArrayList calls = new ArrayList((Collection) map.get("calls"));
-                            System.out.println(calls.get(0));
+                            ArrayList callsRaw = new ArrayList((Collection) map.get("calls"));
+                            ArrayList calls = new ArrayList<TransactionCall>();
+                            callsRaw.forEach(call -> {
+                                HashMap<Key, Object> callMap = new LinkedHashMap<>((LinkedHashMap) call);
+                                TransactionCall transactionCall = new TransactionTrace(callMap.get("from").toString(), callMap.get("to").toString(), callMap.get("value").toString());
+                                calls.add(transactionCall);
+                            });
                         }
+                        System.out.println();
                         write.write(tx.getHash() + "," + map.get("to") + "," + map.get("value") + "\n");
                     }
                     System.out.println();
