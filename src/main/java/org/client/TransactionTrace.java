@@ -2,13 +2,14 @@ package org.client;
 
 import org.example.EthereumTransaction;
 
+import java.lang.reflect.Array;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Key;
+import java.util.*;
 
 public class TransactionTrace extends TransactionCall{
     private EthereumTransaction tx;
-    private List<TransactionCall> calls;
+    private List<TransactionCall> calls = new ArrayList<TransactionCall>();
 
     public TransactionTrace(EthereumTransaction tx) {
         this.tx = tx;
@@ -26,10 +27,29 @@ public class TransactionTrace extends TransactionCall{
         this.setValue(value);
     }
 
-
+    public void addCalls(ArrayList rawCalls) {
+        rawCalls.forEach(call -> {
+            HashMap<Key, Object> callMap = new LinkedHashMap<>((LinkedHashMap) call);
+            TransactionTrace transactionCall = new TransactionTrace(callMap.get("from").toString(), callMap.get("to").toString(), callMap.get("value").toString());
+            this.addCall(transactionCall);
+            if(callMap.get("calls") != null) {
+                ArrayList callsRaw = new ArrayList((Collection) callMap.get("calls"));
+                transactionCall.addCalls(callsRaw);
+            }
+        });
+    }
 
     public void addCall(TransactionCall call) {
         this.calls.add(call);
+    }
+
+    @Override
+    public List<TransactionCall> getCalls() {
+        return calls;
+    }
+
+    public EthereumTransaction getTx() {
+        return this.tx;
     }
 
     @Override
@@ -38,9 +58,8 @@ public class TransactionTrace extends TransactionCall{
                 "from='" + this.getFrom() + '\'' +
                 ", to='" + this.getTo() + '\'' +
                 ", value=" + this.getValue() +
-                ", output='" + this.getOutput() + '\'' +
                 ", error='" + this.getError() + '\'' +
-                ", calls=" + calls +
+                ", calls=" + this.getCalls().toString() +
                 '}';
     }
 

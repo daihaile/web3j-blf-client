@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionCall.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionTrace.java" afterDir="false" />
+    <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="json">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/TransactionCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionCall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/TransactionTrace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionTrace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/resources/Augur.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/resources/Augur.bcql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

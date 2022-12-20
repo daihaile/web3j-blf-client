@@ -1,21 +1,13 @@
 package org.client;
 
-import com.fasterxml.jackson.core.JsonToken;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import jnr.ffi.annotations.In;
 import org.example.*;
-import org.json.JSONArray;
-import org.json.JSONTokener;
-import org.objectweb.asm.tree.analysis.Value;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Service;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.EthFilter;
@@ -33,7 +25,6 @@ import java.security.Key;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -193,11 +184,8 @@ public class Client implements EthereumClient {
         return null;
     }
 
-    public void traceTransaction(ArrayList<EthereumTransaction> txList) throws IOException, URISyntaxException {
-
-        FileWriter write = new FileWriter("data.csv",true);
-        write.write("txHash,from0,to0,value0,from1,to1,value1,from2,to2,value2,from3,to3,value3,from4,to4,value4\n");
-
+    public ArrayList<TransactionTrace> getAllTransactionTraces(ArrayList<EthereumTransaction> txList) throws IOException, URISyntaxException {
+        ArrayList<TransactionTrace> traceList = new ArrayList<TransactionTrace>();
         if(this.wsService != null && service == null) {
             Gson jsonObject = new Gson();
             TypeToken<Map<String, String>> mapType = new TypeToken<Map<String, String>>(){};
@@ -239,35 +227,62 @@ public class Client implements EthereumClient {
                             String output = map.get("error").toString();
                             trace.setError(output);
                         }
-                        System.out.println(trace);
 
                         if(map.get("calls") != null) {
                             ArrayList callsRaw = new ArrayList((Collection) map.get("calls"));
-                            ArrayList calls = new ArrayList<TransactionCall>();
-                            callsRaw.forEach(call -> {
-                                HashMap<Key, Object> callMap = new LinkedHashMap<>((LinkedHashMap) call);
-                                TransactionCall transactionCall = new TransactionTrace(callMap.get("from").toString(), callMap.get("to").toString(), callMap.get("value").toString());
-                                calls.add(transactionCall);
-                            });
+                            trace.addCalls(callsRaw);
                         }
-                        System.out.println();
-                        write.write(tx.getHash() + "," + map.get("to") + "," + map.get("value") + "\n");
+                        traceList.add(trace);
                     }
-                    System.out.println();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             });
         }
-        write.close();
+
+        return traceList;
 
     }
 
+    public boolean writeCSV (ArrayList<TransactionTrace> traceList) throws IOException {
+        FileWriter writer = new FileWriter("data.csv",false);
+        writer.write("txHash,from,to,value,from0,to0,value0,from1,to1,value1,from2,to2,value2,from3,to3,value3,from4,to4,value4\n");
+        for (TransactionTrace trace : traceList) {
+            StringBuilder sb = new StringBuilder();
+            BigInteger amount = convertStringToBigInteger(trace.getValue());
 
+            sb.append(trace.getTx().getHash() + "," + trace.getFrom() + "," + trace.getTo() + "," + amount);
+            // Tiefensuche
+            if (trace.getCalls().size() > 0 ) {
+                List<TransactionCall> calls = trace.getCalls();
+                calls.forEach(call -> {
+                    sb.append(convertCallToCSVString(call));
+                    List<TransactionCall> subCalls = call.getCalls();
+                    subCalls.forEach(subCall -> {
+                        sb.append(convertCallToCSVString(subCall));
+                    });
+                });
+            }
+            sb.append("\n");
+            writer.write(sb.toString());
+        }
+
+        writer.flush();
+        writer.close();
+        return true;
+
+    }
+
+    public String convertCallToCSVString(TransactionCall call) {
+        return "," + call.getFrom() + "," + call.getTo() + "," + convertStringToBigInteger(call.getValue());
+    }
+    public BigInteger convertStringToBigInteger(String str) {
+        String value = str.substring(2);
+        BigInteger amount = new BigInteger(value, 16);
+        return amount;
+    }
 
     @Override
     public String toString() {
@@ -277,71 +292,4 @@ public class Client implements EthereumClient {
                 ", web3j=" + web3j +
                 '}';
     }
-
-    /*
-    public JSONObject convert(String result) {
-        String object = result;
-        String[] str = object.split("structLogs=");
-        String arrayString = str[1].substring(1, str[1].length() -1);
-        String jsonString = "[";
-        String[] brackets = arrayString.split("},");
-        String jsonString1 = "{\"structLog\": [";
-        for (int i = 0; i < brackets.length; i++) {
-            String objectLine = brackets[i] + "}";
-            objectLine = objectLine.replaceAll("=", ":");
-            String objectPart = objectLine.split("stack")[0];
-            String stackPart = objectLine.split("stack")[1];
-
-
-            // format objectpart
-
-            int sliceStart = 2;
-            if( i == 0 ) {
-                sliceStart = 1;
-            }
-            objectPart = objectPart.substring(sliceStart, objectPart.length() - 2 ).replaceAll(" ", "");
-
-            String[] objectPartSplit = objectPart.split(",");
-            String newObjectPart = "{";
-            for (int j = 0; j < objectPartSplit.length ; j++) {
-                String[] objectPartSplitSplit = objectPartSplit[j].split(":");
-                String key = "\"" + objectPartSplitSplit[0] + "\"";
-                String value = "\"" + objectPartSplitSplit[1] + "\"";
-                newObjectPart +=  key + ":" + value + ",";
-            }
-
-            //format stackpart
-            String stackPartnew = stackPart.substring(2, stackPart.length() - 2 ).replaceAll("]}", "").replaceAll(" ", "");;
-            String newStackPart = "\"stack\":[";
-
-            String[] stackPartSplit = stackPartnew.split(",");
-
-            for (int k = 0; k < stackPartSplit.length ; k++) {
-                if(stackPartSplit[k].length() > 0) {
-                    String key = "\"" + stackPartSplit[k] + "\"";
-                    newStackPart +=  key;
-                    if( k < stackPartSplit.length -1 ){
-                        newStackPart += ",";
-                    }
-                } else {
-
-                }
-            }
-            newStackPart += "]}";
-
-            jsonString = newObjectPart + newStackPart;
-            jsonString1 += jsonString;
-
-            if( i <  brackets.length - 1) {
-                jsonString1 += ",";
-            }
-        }
-        jsonString1 += "]}";
-        //JSONObject structLogJson = new JSONObject(jsonString1);
-        return null;
-
-
-    }
-
-     */
 }

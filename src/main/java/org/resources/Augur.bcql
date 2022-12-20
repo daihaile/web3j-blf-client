@@ -6,8 +6,8 @@ SET OUTPUT FOLDER "./test_output";
 SET IPC CONNECTION "/data2/geth-archive/chaindata/geth.ipc";
 
 // tm_opcodes=call
-// tm_contract=0xc1286347b69ed80e640c8af18dace17df0a6dd7c
-// tm_blocks=30,101
+// tm_contract=0xB27Cd6335614476404051D876eC0243C8E4b4927
+// tm_blocks=463,514
 
 address augur = 0x75228DcE4D82566d93068A8D5d49435216551599;
 

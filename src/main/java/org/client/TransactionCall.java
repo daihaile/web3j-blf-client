@@ -46,7 +46,7 @@ public abstract class TransactionCall {
     }
 
     public List<TransactionCall> getCalls() {
-        return calls;
+        return this.calls;
     }
 
     public String getError() {
@@ -55,5 +55,21 @@ public abstract class TransactionCall {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        this.getCalls().forEach(call -> {
+            String callString = call.toString() + ",";
+            sb.append(callString);
+        });
+        return "TransactionCall{" +
+                "from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", value='" + value + '\'' +
+                ", error='" + error + '\'' +
+                ", calls=" + sb.toString() +
+                '}';
     }
 }
