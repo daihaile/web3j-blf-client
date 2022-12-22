@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85d7ac29-1b96-4c89-914c-be92f113a8d8" name="Changes" comment="json">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Augur.bcql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/TransactionCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/client/TransactionTrace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/client/TransactionTrace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/resources/Augur.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/resources/Augur.bcql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestManifest.bcql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,6 +155,8 @@
       <workItem from="1670854169606" duration="1087000" />
       <workItem from="1670942209514" duration="36207000" />
       <workItem from="1671196111620" duration="13120000" />
+      <workItem from="1671548478943" duration="30427000" />
+      <workItem from="1671624641050" duration="4745000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1663770138250</created>
@@ -226,7 +228,7 @@
             <State>
               <option name="CUSTOM_BOOLEAN_PROPERTIES">
                 <map>
-                  <entry key="Show.Git.Branches" value="false" />
+                  <entry key="Show.Git.Branches" value="true" />
                 </map>
               </option>
               <option name="FILTERS">
@@ -261,6 +263,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="3" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

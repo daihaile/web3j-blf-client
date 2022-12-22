@@ -3,13 +3,12 @@
 connectIpc("/home/ethuser/.local/share/openethereum/jsonrpc.ipc");
 setOutputFolder("./output_Richard");
 address augur = 0x75228DcE4D82566d93068A8D5d49435216551599;
-// tm_opcodes=call,log0,log1,log2
-// tm_contract=0x0aFdE9179D955BC00a24afB2B014Af92Ae8c4da6
-// tm_blocks=338,399
 
-// WINDOWS 0xc1286347b69ed80e640c8af18dace17df0a6dd7c
-// BLOCKS (5926229) (10193336) {
-BLOCKS    (5933155)  (7133155) {
+// tm_opcodes=call
+// tm_contract=0x5acc84a3e955Bdd76467d3348077d003f00fFB97
+// tm_blocks=11280200,11281200
+// BLOCKS (4605167) (4606167) {
+BLOCKS    (4605167)  (4606167) {
   int timestamp = multiply(block.timestamp, 1000);
 
   // TRANSACTIONS (ANY) (ANY) {
