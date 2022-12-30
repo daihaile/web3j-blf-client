@@ -97,7 +97,6 @@ public class Client implements EthereumClient {
 
     @Override
     public void close() {
-
     }
 
     public List<EthereumTransaction> getTransactionsOfBlock(BigInteger blockNumber) {
@@ -198,7 +197,10 @@ public class Client implements EthereumClient {
     }
 
 
-    public ArrayList<TransactionTrace> getAllTransactionTracesList(ArrayList<String> txList) throws URISyntaxException, InterruptedException, IOException {
+    public ArrayList<TransactionTrace> getAllTransactionTracesList(ArrayList<String> txList) throws URISyntaxException, InterruptedException, IOException, ExecutionException {
+        FileWriter writer = new FileWriter("data.csv",false);
+        writer.write("txHash,from,to,value,from0,to0,value0,from1,to1,value1,from2,to2,value2,from3,to3,value3,from4,to4,value4\n");
+
         ArrayList<TransactionTrace> traceList = new ArrayList<TransactionTrace>();
         Map<String, String> stringMap = new HashMap<>();
         int retryLimit = 5;
@@ -212,76 +214,19 @@ public class Client implements EthereumClient {
         req.setParams(params);
 
         req.setId(1);
-        for (int i = 0; i < txList.size(); i++) {
-            String hash = txList.get(i).split(",")[0];
-            if(!params.get(0).toString().contains("0x")) {
-                throw new RuntimeException("No valid address in argument 0");
-            }
-            params.remove(0);
-            params.add(0, hash);
-
-            CompletableFuture<Response> res = null;
-            Response result = null;
-            if(this.wsService != null && this.service == null) {
-                res = this.wsService.sendAsync(req,Response.class);
-            } else if (this.wsService == null && this.service != null) {
-                int j = 0;
-                while(true) {
-                    try {
-                        result = this.service.send(req,Response.class);
-                        break;
-                    } catch (IOException e) {
-                        System.out.println(e);
-                        System.out.println(e.getMessage());
-                        if (j < retryLimit) {
-                            j++;
-                            System.out.println(j + " retrying..");
-                            Thread.sleep(1000);
-                        } else {
-                            continue;
-                        }
-                    }
-                }
-            }
+        for (int i = 0; i < txList.size()-1; i++) {
             System.out.println("________________________________");
-            System.out.println(hash + " " + i + "/" + txList.size());
 
-            if(result != null && result.getResult() != null) {
-                HashMap<Key, Object> map = new HashMap<>((LinkedHashMap) result.getResult());
-                /*
-                TransactionTrace trace = createTrace(tx, map);
-                if(trace != null) {
-                    traceList.add(trace);
-                }
+            String[] tx = txList.get(i).split(",");
+            System.out.println("get i " + txList.get(i));
 
-                 */
-            }
-            this.service.close();
-        }
-        LOGGER.info("Fetched " + traceList.size() + " traces from " + txList.size() + " transactions.");
-        return traceList;
-
-    }
-    public ArrayList<TransactionTrace> getAllTransactionTraces(ArrayList<EthereumTransaction> txList) throws URISyntaxException, InterruptedException, IOException, ExecutionException {
-        ArrayList<TransactionTrace> traceList = new ArrayList<TransactionTrace>();
-        Map<String, String> stringMap = new HashMap<>();
-        int retryLimit = 5;
-        stringMap.put("tracer", "callTracer");
-
-        List params = new ArrayList<String>();
-        params.add("0x");
-        params.add(stringMap);
-        Request req = new Request();
-        req.setMethod("debug_traceTransaction");
-        req.setParams(params);
-
-        req.setId(1);
-        for (int i = 0; i < txList.size(); i++) {
-            EthereumTransaction tx = txList.get(i);
+            String hash = tx[0];
+            String from = tx[1];
+            String to = tx[2];
+            String value = tx[3];
             if(!params.get(0).toString().contains("0x")) {
                 throw new RuntimeException("No valid address in argument 0");
             }
-            String hash = tx.getHash();
             params.remove(0);
             params.add(0, hash);
 
@@ -307,25 +252,57 @@ public class Client implements EthereumClient {
                             continue;
                         }
                     }
+                    catch (ClassCastException e) {
+                        System.out.println(e);
+                        if (j < retryLimit) {
+                            j++;
+                            System.out.println(j + " retrying..");
+                            Thread.sleep(1000);
+                        } else {
+                            continue;
+                        }
+                    }
                 }
                 this.service.close();
             }
-            System.out.println("________________________________");
-            System.out.println(hash + " " + i + "/" + txList.size());
 
-            if(result != null && result.getResult() != null) {
-                HashMap<Key, Object> map = new HashMap<>((LinkedHashMap) result.getResult());
+            try {
 
-                if(tx.getStatus().equals("0x0")) {
-                    System.out.println("tx failed, return");
-                    continue;
+                if(result != null && result.getResult() != null) {
+                    HashMap<Key, Object> map = new HashMap<>((LinkedHashMap) result.getResult());
+                    TransactionTrace trace = createTraceFromString(hash, from, to, value, map);
+                    if(trace != null) {
+                        traceList.add(trace);
+                        System.out.println("added trace     " + hash + " " + i + "/" + txList.size());
+
+                        // write to csv
+                        StringBuilder sb = new StringBuilder();
+                        //BigInteger amount = convertStringToBigInteger(trace.getValue());
+                        sb.append(hash + "," + trace.getFrom() + "," + trace.getTo() + "," + trace.getValue());
+                        if (trace.getCalls().size() > 0 ) {
+                            List<TransactionCall> calls = trace.getCalls();
+                            calls.forEach(call -> {
+                                sb.append(convertCallToCSVString(call));
+                                List<TransactionCall> subCalls = call.getCalls();
+                                subCalls.forEach(subCall -> {
+                                    sb.append(convertCallToCSVString(subCall));
+                                });
+                            });
+                        }
+                        sb.append("\n");
+                        writer.write(sb.toString());
+                        writer.flush();
+                    }
                 }
-                TransactionTrace trace = createTrace(tx, map);
-                if(trace != null) {
-                    traceList.add(trace);
-                }
+            } catch (NullPointerException e) {
+                System.out.println("tx get status returns null, skip");
+                System.out.println(e);
+            } catch (ClassCastException e) {
+                System.out.println("classcastexecption");
+                continue;
             }
         }
+        writer.close();
         if(this.service != null) {
             this.service.close();
         } else {
@@ -334,6 +311,160 @@ public class Client implements EthereumClient {
         LOGGER.info("Fetched " + traceList.size() + " traces from " + txList.size() + " transactions.");
         return traceList;
 
+    }
+
+
+    public ArrayList<TransactionTrace> getAllTransactionTraces(ArrayList<EthereumTransaction> txList) throws URISyntaxException, InterruptedException, IOException, ExecutionException {
+        FileWriter writer = new FileWriter("data.csv",false);
+        writer.write("txHash,from,to,value,from0,to0,value0,from1,to1,value1,from2,to2,value2,from3,to3,value3,from4,to4,value4\n");
+
+        ArrayList<TransactionTrace> traceList = new ArrayList<TransactionTrace>();
+        Map<String, String> stringMap = new HashMap<>();
+        int retryLimit = 5;
+        stringMap.put("tracer", "callTracer");
+        List params = new ArrayList<String>();
+        params.add("0x");
+        params.add(stringMap);
+        Request req = new Request();
+        req.setMethod("debug_traceTransaction");
+        req.setParams(params);
+        req.setId(1);
+        ArrayList<String> failedFetches = new ArrayList<>();
+        for (int i = 0; i < txList.size(); i++) {
+            HashMap<Key, Object> map = new HashMap<>();
+            EthereumTransaction tx = txList.get(i);
+            if(!params.get(0).toString().contains("0x")) {
+                throw new RuntimeException("No valid address in argument 0");
+            }
+            String hash = tx.getHash();
+            params.remove(0);
+            params.add(0, hash);
+            System.out.println(params);
+            CompletableFuture<Response> res = null;
+            Response result = null;
+            if(this.wsService != null && this.service == null) {
+                res = this.wsService.sendAsync(req,Response.class);
+                result = res.get();
+            } else if (this.wsService == null && this.service != null) {
+                int j = 0;
+                while(true) {
+                    try {
+                        result = this.service.send(req,Response.class);
+                        if(result != null && result.getResult() != null) {
+                            map = new HashMap<>((LinkedHashMap) result.getResult());
+                            if(map.get("failed") != null) {
+                                throw new IOException("found structlog");
+                            }
+                        }
+
+                        break;
+                    } catch (IOException e) {
+                        System.out.println(e);
+                        if (j < retryLimit) {
+                            j++;
+                            System.out.println(j + " retrying..");
+                            Thread.sleep(1000);
+                        } else {
+                            continue;
+                        }
+                    } catch (ClassCastException e) {
+                        System.out.println(e);
+                        if (j < retryLimit) {
+                            j++;
+                            System.out.println(j + " retrying..");
+                            Thread.sleep(1000);
+                        } else {
+                            failedFetches.add(hash);
+                            System.out.println("failed to fetch.." + failedFetches.size());
+                            continue;
+                        }
+                    }
+                }
+                this.service.close();
+            }
+            System.out.println("________________________________");
+            System.out.println("BLOCK: " + tx.getBlockNumber() + " HASH: " + hash + " " + i + "/" + txList.size());
+
+            try {
+
+                if(result != null && result.getResult() != null) {
+                    //System.out.println(result.getResult());
+                    map = new HashMap<>((LinkedHashMap) result.getResult());
+                    System.out.println(map.keySet());
+                    if(tx.getStatus().equals("0x0")) {
+                        System.out.println("tx failed, return");
+                        continue;
+                    }
+                    TransactionTrace trace = createTrace(tx, map);
+                    if(trace != null) {
+                        traceList.add(trace);
+                        // write to csv
+                        StringBuilder sb = new StringBuilder();
+                        BigInteger amount = convertStringToBigInteger(trace.getValue());
+                        sb.append(trace.getTx().getHash() + "," + trace.getFrom() + "," + trace.getTo() + "," + amount);
+                        if (trace.getCalls().size() > 0 ) {
+                            List<TransactionCall> calls = trace.getCalls();
+                            calls.forEach(call -> {
+                                sb.append(convertCallToCSVString(call));
+                                List<TransactionCall> subCalls = call.getCalls();
+                                subCalls.forEach(subCall -> {
+                                    sb.append(convertCallToCSVString(subCall));
+                                });
+                            });
+                        }
+                        sb.append("\n");
+                        writer.write(sb.toString());
+                        writer.flush();
+                    }
+                }
+            } catch (NullPointerException e) {
+                System.out.println("tx get status returns null, skip");
+                System.out.println(e);
+            } catch (ClassCastException e) {
+                System.out.println("classcastexecption");
+                continue;
+            }
+            System.out.println("");
+        }
+        writer.close();
+        if(this.service != null) {
+            this.service.close();
+        } else {
+            this.wsService.close();
+        }
+        LOGGER.info("Fetched " + traceList.size() + " traces from " + txList.size() + " transactions.");
+        LOGGER.info("Failed to fetch " + failedFetches.size() + " traces.");
+        System.out.println(failedFetches.toString());
+        return traceList;
+    }
+
+    private static TransactionTrace createTraceFromString(String hash, String from, String to, String value, HashMap map) {
+        try {
+            if(map.get("structLogs") != null) {
+                return null;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("null pointer: " + map.keySet());
+            return null;
+        }
+
+        TransactionTrace trace = new TransactionTrace(from, to, value);
+        trace.setTxHash(hash);
+        if(map.get("output") != null) {
+            String output = map.get("output").toString();
+            trace.setOutput(output);
+        }
+
+        if(map.get("error") != null) {
+            String output = map.get("error").toString();
+            trace.setError(output);
+        }
+
+        if(map.get("calls") != null) {
+            ArrayList callsRaw = new ArrayList((Collection) map.get("calls"));
+            trace.addCalls(callsRaw);
+        }
+        return trace;
     }
 
     private static TransactionTrace createTrace(EthereumTransaction tx, HashMap map) {
@@ -376,9 +507,13 @@ public class Client implements EthereumClient {
         writer.write("txHash,from,to,value,from0,to0,value0,from1,to1,value1,from2,to2,value2,from3,to3,value3,from4,to4,value4\n");
         for (TransactionTrace trace : traceList) {
             StringBuilder sb = new StringBuilder();
-            BigInteger amount = convertStringToBigInteger(trace.getValue());
+            String value = trace.getValue();
+            String amount = value;
+            if(value.startsWith("0x")) {
+                amount = convertStringToBigInteger(value).toString();
+            }
 
-            sb.append(trace.getTx().getHash() + "," + trace.getFrom() + "," + trace.getTo() + "," + amount);
+            sb.append(trace.getTxHash() + "," + trace.getFrom() + "," + trace.getTo() + "," + amount);
             if (trace.getCalls().size() > 0 ) {
                 List<TransactionCall> calls = trace.getCalls();
                 calls.forEach(call -> {
@@ -403,6 +538,9 @@ public class Client implements EthereumClient {
         return "," + call.getFrom() + "," + call.getTo() + "," + convertStringToBigInteger(call.getValue());
     }
     public BigInteger convertStringToBigInteger(String str) {
+        if(str.length() < 2) {
+            return new BigInteger("0");
+        }
         String value = str.substring(2);
         BigInteger amount = new BigInteger(value, 16);
         return amount;

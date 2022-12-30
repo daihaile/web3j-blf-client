@@ -1,0 +1,90 @@
+// Author: Dai Hai Le
+SET BLOCKCHAIN "Ethereum";
+
+SET OUTPUT FOLDER "./test_output";
+SET CONNECTION "ws://localhost:8549/";
+
+address gambleContract = 0x1502aF17F48410fF627D0D76279EF06F2ab9Dfe4;
+
+
+BLOCKS (419) (472) {
+
+
+    //Deposit(address addr, uint amount);
+    LOG ENTRIES (0x1502aF17F48410fF627D0D76279EF06F2ab9Dfe4) (
+      Deposit(
+        address addr,
+        uint amount
+      )
+      ){
+        EMIT CSV ROW ("logs") (addr, amount);
+    }
+
+    string name = "GambelInit";
+    LOG ENTRIES (0x1502aF17F48410fF627D0D76279EF06F2ab9Dfe4) (
+        GambleInit(
+          uint id,
+          bool isRed, 
+          uint amount, 
+          uint timestamp, 
+          bool odd, 
+          address sender,
+          uint256 balance)
+    ){
+      EMIT CSV ROW ("logs") (name,id,isRed,amount,timestamp,odd,sender);
+      EMIT XES TRACE ("gamble")(id) (
+        timestamp as xs:int timestamp,
+        sender as xs:string sender,
+        block.number as xs:int blockNumber,
+        balance as xs:int balance
+      );
+      EMIT XES EVENT ("gamble")(id)() (
+        "gamble init" as xs:string concept:name,
+        isRed as xs:boolean isRed,
+        amount as xs:int amount,
+        timestamp as xs:int timestamp,
+        odd as xs:boolean odd
+      );
+    }
+
+    LOG ENTRIES (0x1502aF17F48410fF627D0D76279EF06F2ab9Dfe4) (
+    NewBalance(
+      uint id,
+      address owner,
+      uint newValue,
+      uint balance
+      )
+    ){
+      EMIT XES EVENT ("gamble")(id)() (
+        "value changed" as xs:string concept:name,
+        newValue as xs:int newValue
+      );
+    }
+
+    LOG ENTRIES (0x1502aF17F48410fF627D0D76279EF06F2ab9Dfe4) (
+    UpdateColorValue(
+      uint id,
+      bool isRed
+      )
+    )
+    {
+      EMIT XES EVENT ("gamble")(id)() (
+        "color added" as xs:string concept:name,
+        isRed as xs:boolean isRed
+      );
+    }
+
+
+    LOG ENTRIES (0x1502aF17F48410fF627D0D76279EF06F2ab9Dfe4) (
+    PayFees(
+      uint id,
+      uint amount
+      )
+    )
+    {
+      EMIT XES EVENT ("gamble")(id)() (
+        "Fee paid" as xs:string concept:name,
+        amount as xs:int amount
+      );
+    }
+}

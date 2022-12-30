@@ -9,6 +9,8 @@ import java.util.*;
 
 public class TransactionTrace extends TransactionCall{
     private EthereumTransaction tx;
+
+    private String txHash;
     private List<TransactionCall> calls = new ArrayList<TransactionCall>();
 
     public TransactionTrace(EthereumTransaction tx) {
@@ -50,6 +52,18 @@ public class TransactionTrace extends TransactionCall{
 
     public EthereumTransaction getTx() {
         return this.tx;
+    }
+
+    public String getTxHash() {
+        if(this.tx != null){
+            return this.tx.getHash();
+        } else {
+            return this.txHash;
+        }
+    }
+
+    public void setTxHash(String txHash) {
+        this.txHash = txHash;
     }
 
     @Override
